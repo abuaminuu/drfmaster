@@ -27,7 +27,7 @@ python manage.py runserver
 - `/snippets/{id}/` - Retrieve, update, or delete specific snippets
 - `/users/` - List and view user profiles
 - `/api-auth/` - Session authentication endpoints
-- `/swagger/` - Interactive API documentation
+- `/swagger/swagger/` - Interactive API documentation
 
 ## Documentation
 Access the complete interactive API documentation at `/swagger/` after starting the server. The Swagger interface provides:
