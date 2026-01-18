@@ -34,7 +34,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-schema-ui"),
     path("test/", lambda request: HttpResponse("Test OK")),
-    path("api-x/", include('snippets.urls')),
+    path("api/", include('snippets.urls')),
     path("api-auth/", include("rest_framework.urls")),
 ]
 
