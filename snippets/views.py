@@ -11,6 +11,8 @@ from snippets.permissions import IsOwnerOrReadonly
 from rest_framework.reverse import reverse
 from rest_framework import renderers
 from rest_framework import viewsets
+from snippets.tasks import send_welcome_email
+
 # Create your views here.
 
 @api_view(["GET"])
@@ -62,6 +64,8 @@ class SnippetViewSet(viewsets.ModelViewSet):
         return Response(f"hi i am {self.request.user} !")
 
     # override create to include owner
-    def perfom_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
+    def perform_create(self, serializer):
+        owner = self.request.user
+        serializer.save(owner=owner)
+        # send welcome email asynchronously
+        send_welcome_email.delay(self.request.user.email)
