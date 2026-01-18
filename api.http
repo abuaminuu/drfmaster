@@ -1,0 +1,236 @@
+### API ROOT
+GET http://localhost:8000/
+Accept: application/json
+
+### SWAGGER DOCUMENTATION
+GET http://localhost:8000/swagger/schema/
+Accept: text/html
+
+
+### CREATE SNIPPET
+POST http://localhost:8000/snippets/
+Content-Type: application/application/json
+Authorization: Bearer sdgfyu76s567s567sdz5f67dz
+
+{
+    "title": "Sample Snippet",
+    "code": "print('Hello, World!')",
+    "linenos": true,
+    "language": "python",
+    "style": "friendly"
+}
+
+### SWAGGER JSON SCHEMA
+GET http://localhost:8000/swagger/?format=json
+Accept: application/json
+
+### REDOC DOCUMENTATION
+GET
+GET http://localhost:8000/redoc/
+Accept: text/html
+
+### USER REGISTRATION
+POST http://localhost:8000/users/
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "testpass123",
+    "email": "test@example.com"
+}
+
+### USER LOGIN
+POST http://localhost:8000/api-auth/login/
+Content-Type: application/x-www-form-urlencoded
+
+username=testuser&password=testpass123
+
+### USER LOGOUT
+POST http://localhost:8000/api-auth/logout/
+
+### GET ALL USERS
+GET http://localhost:8000/users/
+Accept: application/json
+
+### GET SPECIFIC USER
+GET http://localhost:8000/users/1/
+Accept: application/json
+
+### GET ALL SNIPPETS (PUBLIC)
+GET http://localhost:8000/snippets/
+Accept: application/json
+
+### GET SNIPPET BY ID
+GET http://localhost:8000/snippets/1/
+Accept: application/json
+
+### CREATE NEW SNIPPET (AUTHENTICATED)
+POST http://localhost:8000/snippets/
+Authorization: Basic testuser:testpass123
+Content-Type: application/json
+
+{
+    "title": "Hello World in Python",
+    "code": "print('Hello, World!')",
+    "linenos": true,
+    "language": "python",
+    "style": "friendly"
+}
+
+### CREATE SNIPPET WITH DIFFERENT LANGUAGE
+POST http://localhost:8000/snippets/
+Authorization: Basic testuser:testpass123
+Content-Type: application/json
+
+{
+    "title": "JavaScript Function",
+    "code": "function greet() {\n  console.log('Hello');\n}",
+    "linenos": false,
+    "language": "javascript",
+    "style": "monokai"
+}
+
+### UPDATE SNIPPET (OWNER ONLY)
+PUT http://localhost:8000/snippets/1/
+Authorization: Basic testuser:testpass123
+Content-Type: application/json
+
+{
+    "title": "Updated Python Example",
+    "code": "print('Hello, Updated World!')",
+    "linenos": true,
+    "language": "python",
+    "style": "vim"
+}
+
+### PARTIAL UPDATE SNIPPET
+PATCH http://localhost:8000/snippets/1/
+Authorization: Basic testuser:testpass123
+Content-Type: application/json
+
+{
+    "title": "Partially Updated Title"
+}
+
+### DELETE SNIPPET
+DELETE http://localhost:8000/snippets/1/
+Authorization: Basic testuser:testpass123
+
+### GET SNIPPET HIGHLIGHTED HTML
+GET http://localhost:8000/snippets/1/highlight/
+Accept: text/html
+
+### GET SNIPPET HIGHLIGHTED HTML (JSON FORMAT)
+GET http://localhost:8000/snippets/1/highlight/?format=json
+Accept: application/json
+
+### GET SNIPPET OWNER
+GET http://localhost:8000/snippets/1/owner/
+Accept: application/json
+
+### TEST EMAIL NOTIFICATION ENDPOINT
+POST http://localhost:8000/api/send-email/
+Authorization: Basic testuser:testpass123
+Content-Type: application/json
+
+{
+    "to": "recipient@example.com",
+    "subject": "Test Email from Snippets API",
+    "message": "This is a test email sent via Celery background task."
+}
+
+### GET CELERY TASK STATUS
+task_id="{{}}"
+GET http://localhost:8000/api/task-status/{{task_id}}/
+Accept: application/json
+
+### SEARCH SNIPPETS
+GET http://localhost:8000/snippets/?search=python
+Accept: application/json
+
+### FILTER SNIPPETS BY LANGUAGE
+GET http://localhost:8000/snippets/?language=python
+Accept: application/json
+
+### ORDER SNIPPETS BY CREATION DATE
+GET http://localhost:8000/snippets/?ordering=created
+Accept: application/json
+
+### ORDER SNIPPETS BY TITLE DESCENDING
+GET http://localhost:8000/snippets/?ordering=-title
+Accept: application/json
+
+### PAGINATION EXAMPLE
+GET http://localhost:8000/snippets/?page=2&page_size=5
+Accept: application/json
+
+### GET SNIPPETS IN JSON FORMAT
+GET http://localhost:8000/snippets/?format=json
+Accept: application/json
+
+### GET SNIPPETS IN API FORMAT
+GET http://localhost:8000/snippets/?format=api
+Accept: text/html
+
+### TEST UNAUTHORIZED ACCESS (SHOULD RETURN 401/403)
+DELETE http://localhost:8000/snippets/1/
+# No Authorization header
+
+### TEST INVALID DATA
+POST http://localhost:8000/snippets/
+Authorization: Basic testuser:testpass123
+Content-Type: application/json
+
+{
+    "title": "",
+    "code": ""
+}
+
+### TEST CORS HEADERS
+OPTIONS http://localhost:8000/snippets/
+Accept: application/json
+
+### HEALTH CHECK ENDPOINT
+GET http://localhost:8000/health/
+Accept: application/json
+
+### GET API SCHEMA
+GET http://localhost:8000/schema/
+Accept: application/json
+
+### GET OPENAPI SCHEMA
+GET http://localhost:8000/openapi.json
+Accept: application/json
+
+### TEST WITH SESSION AUTHENTICATION
+# First login to establish session
+POST http://localhost:8000/api-auth/login/
+Content-Type: application/x-www-form-urlencoded
+
+username=testuser&password=testpass123
+
+# Then use session cookie for subsequent requests
+GET http://localhost:8000/snippets/
+
+### TEST PERMISSIONS - CREATE SNIPPET WITHOUT AUTH
+POST http://localhost:8000/snippets/
+Content-Type: application/json
+
+{
+    "title": "Unauthorized Attempt",
+    "code": "This should fail"
+}
+
+### TEST RATE LIMITING (IF CONFIGURED)
+# Make multiple rapid requests
+GET http://localhost:8000/snippets/
+GET http://localhost:8000/snippets/
+GET http://localhost:8000/snippets/
+
+### TEST INVALID ENDPOINT (404)
+GET http://localhost:8000/invalid-endpoint/
+Accept: application/json
+
+### TEST SERVER ERROR (500) - IF IMPLEMENTED
+GET http://localhost:8000/api/error-test/
+Accept: application/json

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "Starting Redis Server on port 8000"
+redis-server start
+
+echo "Starting Django Dev Server on port 8000"
+python3 manage.py runserver
+
+echo "Starting Celery Server on port 9601/0"
+celery -A drfmaster worker --loglevel=INFO
