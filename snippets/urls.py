@@ -31,5 +31,3 @@ router.register(r"snippets", views.SnippetViewSet, basename="snippet")
 urlpatterns = [
     path("", include(router.urls)),
 ]
-
-
