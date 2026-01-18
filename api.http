@@ -140,7 +140,7 @@ Content-Type: application/json
 }
 
 ### GET CELERY TASK STATUS
-task_id="{{}}"
+@task_id = 1
 GET http://localhost:8000/api/task-status/{{task_id}}/
 Accept: application/json
 

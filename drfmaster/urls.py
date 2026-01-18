@@ -29,15 +29,12 @@ schema_view = swagger_get_schema_view(
     public=True,
 )
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include('snippets.urls')),
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-schema-ui"),
-]
-
-# for browsable API login and logout
-urlpatterns += [
+    path("api/", include('snippets.urls')),
     path("api-auth/", include("rest_framework.urls")),
 ]
 
+# for browsable API login and logout
+# remove 'rest_framework.urlsin production environment
