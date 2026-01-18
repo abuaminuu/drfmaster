@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: django-snippets-api
+    runtime: python
+    region: oregon  # or your preferred region
+    plan: free  # or starter for production
+    buildCommand: |
+      pip install -r requirements.txt
+      python3 manage.py collectstatic --noinput
+      python3 manage.py migrate
+    startCommand: gunicorn yourproject.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: DEBUG
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+    healthCheckPath: /swagger/
+    
+  - type: worker
+    name: celery-worker
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A drfmaster worker --loglevel=info
+    envVars:
+      - key: DATABASE_URL
+        fromService:
+          type: web
+          name: django-snippets-api
+          envVarKey: DATABASE_URL
+      - key: REDIS_URL
+        fromService:
+          type: web
+          name: django-snippets-api
+          envVarKey: REDIS_URL
+
+  - type: redis
+    name: redis-broker
+    region: oregon
+    plan: free
+    ipAllowList: []
+
